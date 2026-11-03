@@ -169,7 +169,7 @@ export default class {
         await container.get<SessionPlayer>(TYPES.Services.SessionPlayer).recover(this.client);
       } catch (error: unknown) {
         console.error(`Listening-session recovery failed: ${sanitizeErrorForLog(error)}`);
-        this.client.destroy();
+        await this.client.destroy();
         return;
       }
 

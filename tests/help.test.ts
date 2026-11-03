@@ -74,12 +74,17 @@ import Help from '../src/commands/help.js';
 
 let commands: Command[];
 let client: Client;
+// Vitest 5 clears mock history before each test, so capture what registration did in beforeAll.
+let loginCalls = 0;
+let putCalls: unknown[][] = [];
 
 beforeAll(async () => {
   commands = container.getAll<Command>(TYPES.Command);
   client = container.get<Client>(TYPES.Client);
   await container.get<Bot>(TYPES.Bot).register();
   await client.listeners('ready')[0](client);
+  loginCalls = mocks.login.mock.calls.length;
+  putCalls = [...mocks.put.mock.calls];
 });
 
 describe('/help integration', () => {
@@ -88,10 +93,10 @@ describe('/help integration', () => {
     expect(help).toHaveLength(1);
     expect(help[0]).toBeInstanceOf(Help);
     expect(container.getAll<Command>(TYPES.Command)).toContain(help[0]);
-    expect(mocks.login).toHaveBeenCalledOnce();
-    expect(mocks.put).toHaveBeenCalledWith('/applications/application-id/commands', {
+    expect(loginCalls).toBe(1);
+    expect(putCalls).toContainEqual(['/applications/application-id/commands', {
       body: commands.map(command => command.slashCommand.toJSON()),
-    });
+    }]);
   });
 
   it('routes help without a voice channel and privately lists every registered command within Discord limits', async () => {
