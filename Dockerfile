@@ -22,6 +22,7 @@ RUN apt-get update \
     else \
         /opt/yt-dlp/bin/pip install --no-cache-dir "yt-dlp[default]"; \
     fi \
+    && /opt/yt-dlp/bin/pip uninstall -y setuptools \
     && ln -s /opt/yt-dlp/bin/yt-dlp /usr/local/bin/yt-dlp \
     && apt-get autoclean \
     && apt-get autoremove \
@@ -45,7 +46,9 @@ COPY package.json .
 COPY yarn.lock .
 
 RUN yarn install --prod
-RUN cp -R node_modules /usr/app/prod_node_modules
+# glob/minimatch/rimraf are only used by @discordjs/opus's install-time tooling (node-pre-gyp), never at runtime
+RUN rm -rf node_modules/minimatch node_modules/glob node_modules/rimraf \
+    && cp -R node_modules /usr/app/prod_node_modules
 
 RUN yarn install
 
