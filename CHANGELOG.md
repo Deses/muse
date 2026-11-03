@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Update dependencies to resolve known security advisories (`yarn audit` now reports 4 moderate findings, down from 204 including 3 critical): discord.js 14.28, @discordjs/rest 2, tsx 4, TypeScript 5, vitest 5, release-it 19, and in-range updates, plus resolutions for `tar`, `basic-ftp` and release-it's `undici`. The remaining findings are `minimatch` 3.x used by ESLint 7 and `@discordjs/opus`'s installer.
+- Update dependencies to resolve known security advisories (`yarn audit` now reports 4 moderate findings, down from 204 including 3 critical): discord.js 14.28, @discordjs/rest 2, tsx 4, TypeScript 5, vitest 5, release-it 19, removal of the unused `@distube/ytdl-core`, `@distube/ytsr` and `ytsr`, and in-range updates, plus resolutions for `tar`, `basic-ftp` and release-it's `undici`. The remaining findings are `minimatch` 3.x used by ESLint 7 and `@discordjs/opus`'s installer.
 
 ## [2.12.0] - 2026-10-30
 
