@@ -22,7 +22,8 @@ RUN apt-get update \
     else \
         /opt/yt-dlp/bin/pip install --no-cache-dir "yt-dlp[default]"; \
     fi \
-    && /opt/yt-dlp/bin/pip uninstall -y setuptools \
+    && /opt/yt-dlp/bin/python -m pip uninstall -y setuptools pip \
+    && rm -rf /usr/share/python-wheels \
     && ln -s /opt/yt-dlp/bin/yt-dlp /usr/local/bin/yt-dlp \
     && apt-get autoclean \
     && apt-get autoremove \
