@@ -51,7 +51,8 @@ jobs:
           format: sarif
           output: trivy.sarif
           scanners: vuln
-          severity: CRITICAL,HIGH,MEDIUM
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH,MEDIUM,LOW
 
       - uses: actions/upload-artifact@v7
         with:
@@ -63,6 +64,7 @@ jobs:
         with:
           image-ref: ${{ env.IMAGE }}:${{ github.sha }}
           format: table
-          severity: CRITICAL,HIGH,MEDIUM
+          severity: CRITICAL,HIGH,MEDIUM,LOW
           scanners: vuln
-          exit-code: '0'
+          ignore-unfixed: true
+          exit-code: '1'
