@@ -9,9 +9,6 @@ on:
         description: Branch or ref of the code to build
         default: muse-cve-dependencies
 
-env:
-  IMAGE: ghcr.io/${{ github.repository_owner }}/muse
-
 jobs:
   build-scan:
     runs-on: ubuntu-latest
@@ -20,6 +17,9 @@ jobs:
       packages: write
       security-events: write
     steps:
+      - name: Compute lowercase image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/muse" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || 'muse-cve-dependencies' }}
