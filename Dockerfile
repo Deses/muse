@@ -7,6 +7,7 @@ ENV MUSE_BUNDLED_YT_DLP_PATH=/opt/yt-dlp/bin/yt-dlp
 # https://github.com/prisma/prisma/issues/19729#issuecomment-1591270599
 # Install ffmpeg and yt-dlp runtime dependencies
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install --no-install-recommends -y \
     ffmpeg \
     tini \
@@ -15,6 +16,7 @@ RUN apt-get update \
     python3 \
     python3-venv \
     && python3 -m venv /opt/yt-dlp \
+    && /opt/yt-dlp/bin/pip install --no-cache-dir --upgrade pip setuptools \
     && if [ -n "${YT_DLP_VERSION}" ]; then \
         /opt/yt-dlp/bin/pip install --no-cache-dir "yt-dlp[default]==${YT_DLP_VERSION}"; \
     else \
@@ -59,6 +61,9 @@ RUN yarn build
 FROM base AS runner
 
 WORKDIR /usr/app
+
+# npm (bundled with the Node image) is not used at runtime; removing it also removes its bundled dependencies from the image
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 
 COPY --from=builder /usr/app/dist ./dist
 COPY --from=dependencies /usr/app/prod_node_modules node_modules
